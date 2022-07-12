@@ -1,0 +1,334 @@
+(一) 字符串函数
+value函数 
+语法：value(expression1,expression2) 
+
+value函数是用返回一个非空的值，当其第一个参数非空，直接返回该参数的值，如果第一个参数为空，则返回第二个参数的值。
+
+--表示如果t1.id为空，则返回空串，如果t1.id不为空，则返回t1.id。   
+
+eg：select value(id,'') from t1 
+
+ps：空是值为null的情况，不包括空字符串‘’
+
+coalesce函数 
+语法：coalesce(arg1,arg2...) 
+
+coalesce返回参数集中第一个非null参数。用法类似于value函数。 
+
+length函数 
+语法：length(arg) 
+
+length函数返回参数的长度。
+
+eg：select length(name) from t1    
+
+ps：值为null时，返回null，空字符串‘’返回1
+
+lcase、lower函数 
+语法：lcase()、lower() 
+
+lcase、lower函数返回定长、变长字符串的小写形式。
+
+eg： select lcase(name),lower(name) from t1   
+
+ucase、upper函数 
+语法：ucase()、upper() 
+
+ucase、upper函数返回定长、变长字符串的大写形式。
+
+eg：select ucase(name),upper(name) from t1   
+
+ltrim、rtrim函数 
+语法：ltrim()、rtrim() 
+
+ltrim、rtrim函数从char、varchar、graphic或者vargraphic中去掉左侧或右侧的空格。
+
+eg：select ltrim(name),rtrim(name) from t1   
+
+left、right函数 
+语法：left(arg,length)、right(arg,length) 
+
+left、right函数返回arg最左边、右边的length个字符串，arg可以是char或binary string。
+
+eg：select left(name,2),right(name,2) from t1  
+
+concat函数 
+语法：concat(arg1,arg2) 
+
+concat函数返回两个字符串的连接。
+
+eg：select concat(first_name,last_name) from t1  
+
+insert函数 
+语法：insert(arg1,pos,size,arg2) 
+
+insert函数返回一个字符串，将arg1从pos处删除size个字符，将arg2插入该位置。
+
+locate函数 
+语法：locate(arg1,arg2,<pos>) 
+
+locate函数在arg2中查找arg1第一次出现的位置，如果指定pos，则从arg2的pos处开始查找arg1第一次出现的位置。
+
+eg：select locate('a',name) from t1   
+
+posstr函数 
+语法：posstr(exp1,exp2) 
+
+posstr函数返回exp2在exp1中的位置。
+
+eg：select posstr(name，'a') from t1  
+
+repeat函数 
+语法：repeat(arg1,num_times) 
+
+repeat函数返回arg1被重复num_times次的字符串。
+
+eg：select repeat(name，2) from t1 
+
+replace函数 
+语法：replace(exp1,exp2,exp3) 
+
+replace函数用exp3代替exp1中所有的exp2。
+
+eg：select replace('romannd'，'nnd','ccb') from t1  
+
+space函数 
+语法：space(size) 
+
+space函数返回一个包含size个空格的字符串。
+
+eg：select space(10) from t1 
+
+substr函数 
+语法：substr(arg1,pos,<length>) 
+
+substr函数返回arg1中pos位置开始的length个字符，如果没有指定length，则返回剩余的字符。
+
+eg：select substr('cdnjfdjfjd',5,2) from t1  
+
+(二) 类型转换函数
+cast表达式用来转换类型使用
+select cast(current time as char(8) ) from sysibm.sysdummy1 
+
+转换为字符串类型： 
+char函数 
+语法：char(arg) 
+
+char函数返回日期时间型、字符串、整数、十进制或双精度浮点数的字符串表示。
+
+eg：select char(salary) from test   
+
+chr函数 
+语法：chr(arg) 
+
+chr函数返回由参数指定的ascii码的字符，参数可以是integer或smallint。
+
+eg：select chr(167) from test   
+
+varchar函数 
+语法：varchar(arg,length) 
+
+varchar函数返回字符串、日期型、图形串的可变长度的字符串表示。
+
+--50为截取长度，如果name字符串的长度大于50，则返回“sql0445w 值已被截断。sqlstate=01004”。  
+
+eg：select varchar(name,50) from test   
+
+digits函数 
+语法：digits() 
+
+digits函数返回smallint、integer、bigit或者decimal参数的字符串值。
+
+eg：select digits(id) from test
+
+转换为数字类型： 
+double、float函数 
+语法：double()、float() 
+
+double、float函数如果参数是一个数字表达式，返回与其对应的浮点数，否则返回错误代码。
+
+eg： select double('4569') from test
+
+int函数 
+语法：int() 
+
+int函数返回整型常量中的数字、字符串或者日期、时间的整数表示。
+
+eg： select int('111') from test
+
+bigint函数 
+语法：bigint() 
+
+bigint函数返回整型常量中的数字、字符串或者时间戳的64位长整数表示。
+
+eg：select bigint('111') from test
+
+smallint函数 
+语法：smallint() 
+
+smallint函数返回整型常量中的数字、字符串短整数表示。
+
+eg：select smallint('111') from test
+
+real函数 
+语法：real() 
+
+real函数返回一个数值的单精度浮点数表示。
+
+eg：select real(10) from test
+
+dec[imal]函数 
+语法：dec[imal]() 
+
+dec[imal]函数返回一个数值、decimal的字符串、integer的字符串、float-point的字符串、日期、时间或时间戳的decimal数值。
+
+eg：select dec(10) from test
+
+hex函数 
+语法：hex() 
+
+hex函数返回一个字符串的值的16进制表示。
+
+eg：select hex(10) from test
+
+floor函数 
+语法：floor() 
+
+floor函数小于或等于参数的最大整数。
+
+eg：select floor(10.50) from test  
+
+(三) 日期时间函数
+date函数 
+语法：date(arg) 
+
+date函数返回一个日期、时间戳、日期字符串、时间戳字符串中的日期。
+
+eg：select date('2017-5-20 14:40:00') from test  
+
+time函数 
+语法：time(arg) 
+
+time函数返回一个时间、时间戳或一个时间、时间戳字符串参数的时间。
+
+eg：select time('2005-06-12 16.24.18.121212') from test  
+
+timestamp函数 
+语法：timestamp(expres1[,expres2]) 
+
+timestamp函数返回一个或两个参数中的时间戳。
+
+eg：select timestamp('2005-06-12 16.24.18.121212') from test  
+
+注：如果只有一个参数，这个参数必须是一个时间戳或一个时间戳字符串；如果有两个参数，第一个参数必须是一个日期或日期字符串，第二个参数必须是一个时间或时间戳字符串。 
+
+year函数 
+语法：year(arg) 
+
+year函数返回一个日期、时间戳、日期字符串、时间戳字符串的年部分。
+
+eg：select year('2005-06-12') from test  
+
+month函数 
+语法：month(arg) 
+
+month函数返回一个日期、时间戳、日期字符串、时间戳字符串的月部分。
+
+eg：select month('2005-06-12') from test  
+
+quarter函数 
+语法：quarter(arg) 
+
+quarter函数返回一个日期、时间戳、日期字符串、时间戳字符串的季度部分。
+
+eg：select quarter(current date) from test  
+
+week函数 
+语法：week(arg) 
+
+week函数返回一个日期、时间戳、日期字符串、时间戳字符串的星期部分。
+
+eg：select week(current date) from test  
+
+day函数 
+语法：day(arg) 
+
+day函数返回一个日期、时间戳、日期字符串、时间戳字符串的日部分。
+
+eg：select day(current date) from test  
+
+hour函数 
+语法：hour(arg) 
+
+hour函数返回一个日期、时间戳、日期字符串、时间戳字符串的小时部分。
+
+eg：select hour(current time) from test  
+
+minute函数 
+语法：minute(arg) 
+
+minute函数返回一个日期、时间戳、日期字符串、时间戳字符串的分钟部分。
+
+eg：select minute(current time) from test  
+
+second函数 
+语法：second(arg) 
+
+second函数返回一个日期、时间戳、日期字符串、时间戳字符串的秒部分。
+
+eg：select second(current time) from test  
+
+days函数 
+语法：days(arg) 
+
+days函数返回一个日期、时间戳、日期字符串、时间戳字符串的日期整数表示法，从0001-01-01以来的天数。
+
+eg：select days(current time) from test  
+
+dayofyear函数 
+语法：dayofyear(arg) 
+
+dayofyear函数返回一个日期、时间戳、日期字符串、时间戳字符串在年内的天值。
+
+eg：select dayofyear(current date) from test  
+
+ps：urrent date表示当前时间。
+
+dayofweek函数 
+语法：dayofweek(arg) 
+
+dayofweek函数返回一个日期、时间戳、日期字符串、时间戳字符串在周内的天值（从周日开始 1 到 7 ）。
+
+eg：select dayofweek(current date) from test  
+
+ps：从周日开始算。
+
+dayofweek_iso函数 
+语法：dayofweek_iso(arg) 
+
+dayofweek_iso函数返回一个日期、时间戳、日期字符串、时间戳字符串在周内的天值（从周一开始 1 到 7 ）。 
+
+eg：select dayofweek_iso(current date) from test  
+
+ps：从周一开始算。
+
+dayname函数 
+语法：dayname(arg) 
+
+dayname函数返回一个日期、时间戳、日期字符串、时间戳字符串是星期几。
+
+eg：select dayname(current date) from test  
+
+monthname函数 
+语法：monthname(arg) 
+
+monthname函数返回一个日期、时间戳、日期字符串、时间戳字符串的月份名。
+
+eg：select monthname(current date) from test  
+
+midnight_seconds函数 
+语法：midnight_seconds(arg) 
+
+midnight_seconds函数返回午夜和参数指定的时间值之间的秒数，用范围再 0 到 86400 之间的整数值表示。
+
+eg：select midnight_seconds(current time) from test

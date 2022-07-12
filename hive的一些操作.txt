@@ -1,0 +1,74 @@
+--改表名
+ALTER TABLE table_name RENAME TO new_table_name;
+--修改表属性
+alter table ext_test set tblproperties ('comment' = 'EXTERNAL table a!');
+--增加表分区
+alter table ext_task add IF NOT EXISTS partition(taskname='wordcount') location 'wordcount';
+alter table ext_task add IF NOT EXISTS partition(taskname='maxword') location 'maxword';
+alter table ext_task add IF NOT EXISTS partition(taskname='sortword') location 'sortword';
+--删除分区
+alter table inner_task DROP IF EXISTS partition(taskname='sortword');
+--分区重命名
+alter table inner_task partition (taskname='maxword') rename to partition (taskname='maxword01');
+--增加表字段
+alter table ext_test_c add columns (test_col string);
+--修改表字段
+alter table ext_test_c CHANGE  COLUMN col_new col_new2 string;
+--load 加载数据
+-- 以覆盖或追加的方式 ， 从linux本地 copy文件到表或表分区里
+LOAD DATA LOCAL INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)]
+
+--以覆盖或追加的方式 ， 从hdfs move 文件到表或表分区里
+LOAD DATA INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)]
+
+--动态分区
+	--设置参数动态分区
+	--开启动态分区
+	set hive.exec.dynamic.partition=true;  
+	--这个属性默认是strict，即限制模式，strict是避免全分区字段是动态的，必须至少一个分区字段是指定有值即静态的，且必
+	--须放在最前面。设置为nonstrict之后所有的分区都可以是动态的了。
+	set hive.exec.dynamic.partition.mode=nonstrict;
+	------------------------------------------------------------------------
+	--表示每个节点生成动态分区的最大个数，默认是100
+	set hive.exec.max.dynamic.partitions.pernode=10000;  
+	
+	--表示一个DML操作可以创建的最大动态分区数，默认是1000
+	set hive.exec.max.dynamic.partitions=100000;
+	
+	--表示一个DML操作可以创建的最大文件数，默认是100000
+	set hive.exec.max.created.files=150000
+	
+	--将select数据，覆盖到表的动态分区
+	insert overwrite table table1 partition (ds, hr)  
+	select key, value, ds, hr FROM table2 WHERE ds is not null;
+	
+	
+--将数据写入一个文件
+	-- 查询ext_task 表中分区为wordcount 的数据，以AVRO 格式写入到hdfs指定目录
+	insert overwrite directory 'hdfs://ns1/user/panniu/hive26/export_data/d1_avro' STORED AS AVRO
+	select word, num from ext_task where taskname='wordcount01';
+	-- 查询ext_task 表中分区为wordcount 的数据，以text 格式写入到本地目录中
+	insert overwrite local directory '/home/panniu/hive_test/d1_text'
+	select word, num from ext_task where taskname='wordcount01';
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+multi group by 可以将查询中的多个group by操作组装到一个MapReduce任务中，起到优化作用
+
+例子：
+
+select Provice,city,county,count(rainfall) from area where data="2018-09-02" group by provice,city,count
+
+select Provice,count(rainfall) from area where data="2018-09-02" group by provice
+
+ 
+
+#使用multi group by
+
+from area
+
+ insert overwrite table temp1
+
+  select Provice,city,county,count(rainfall) from area where data="2018-09-02" group by provice,city,count
+
+ insert overwrite table temp2
+
+  select Provice,count(rainfall) from area where data="2018-09-02" group by provice
+
+ 
+
+使用multi group by 之前必须配置参数：
+
+<property>
+
+    <name>hive.multigroupby.singlemr</name>
+
+    <value>true</value>
+
+</property>
+————————————————
+版权声明：本文为CSDN博主「谦卑t」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_42246689/article/details/84671976

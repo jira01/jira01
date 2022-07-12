@@ -1,0 +1,102 @@
+Keygen为Key Generator的简写形式就是一般所说的注册机，是为软件注册生成所需的注册码的一种程序
+
+zookeeper 
+做Hadoop组件协调服务
+
+oozie：工作流
+
+hive 
+数据 仓库，数据存到hdfs上，用类似于SQL的语言来做数据 分析，通过将SQL转化成mapreduce任务
+
+spark
+类实时计算框架，内存计算，比mapreduce 快10到100倍
+
+ip配置
+BOOTPROTO="static"
+IPADDR="192.168.186.61"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.186.2"
+DNS="192.168.186.2"
+NM_CONTROLLED="no"
+
+配置阿里云 yum 源
+1）安装sz rz
+yum install -y lrzsz
+2）下载 repo 文件  --> yum 要安装软件的地址 yum --> 在线的rpm包的时候 --> 外国的网站 --> 阿里云
+文件下载地址：  http://mirrors.aliyun.com/repo/Centos-7.repo
+3）用 rz 将下载的 Centos-7.repo 文件上传到Linux系统的某个目录下
+4）备份并替换系统的repo文件 
+cp Centos-7.repo /etc/yum.repos.d/ 
+cd /etc/yum.repos.d/ 
+mv CentOS-Base.repo CentOS-Base.repo.bak 
+mv Centos-7.repo CentOS-Base.repo
+执行yum源更新命令
+yum clean all 
+#服务器的包信息下载到本地电脑缓存起来
+yum makecache 
+yum update -y
+安装常用软件
+yum install -y openssh-server vim gcc gcc-c++ glibc-headers bzip2-devel lzo-devel curl wget openssh-clients zlib-devel autoconf automake cmake libtool openssl-devel fuse-devel snappy-devel telnet unzip zip net-tools.x86_64 firewalld systemd ntp unrar bzip2 
+
+.配置vimrc
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set encoding=utf-8
+set nu
+set cursorline
+set autoindent
+set tabstop=4
+inoremap ( ()<LEFT>
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ' ''<LEFT>
+inoremap " ""<LEFT>
+inoremap < <><LEFT>
+
+配置JDK 环境变量
+1）修改系统环境变量文件 /etc/profile，在文件尾部追加以下内容
+export JAVA_HOME=/usr/java/jdk1.8.0_144
+export JRE_HOME=$JAVA_HOME/jre
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+zookeeper环境变量配置
+export HADOOP_HOME=/usr/local/hadoop
+export HADOOP_COMMON_HOME=${HADOOP_HOME}
+export HADOOP_HDFS_HOME=${HADOOP_HOME}
+export HADOOP_MAPRED_HOME=${HADOOP_HOME}
+export HADOOP_YARN_HOME=${HADOOP_HOME}
+export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+export HDFS_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+export YARN_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:/usr/lib64
+
+export HBASE_HOME=/usr/local/hbase
+export HIVE_HOME=/usr/local/hive
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HBASE_HOME/bin:$HIVE_HOME/bin:/usr/local/zookeeper/bin
+
+同步时间
+crontab -e
+编辑内容
+0 * * * * /usr/sbin/ntpdate time1.aliyun.com >> /tmp/autontpdate 2>&1
+
+修改/usr/local/zookeeper软链接所属用户组
+chmod -h  要加个-h
+
+远程过程调用（Remote Procedure Call)
+
+mr查看任务执行日志
+#启动yarn日志代理服务
+yarn-daemon.sh start proxyserver
+#启动 MR 的jobhistory服务
+mr-jobhistory-daemon.sh start historyserver 
+
+速排
+
+F2 查看全类名
+
+select user,host from mysql.user
+fullouterjoin:全连接
+union:合并去重
+union all:合并不去重
+

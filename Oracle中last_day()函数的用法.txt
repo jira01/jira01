@@ -1,0 +1,101 @@
+Oracle中last_day()函数的用法
+Oracle中last_day()函数的用法
+last_day(time):返回指定日期所在月份的最后一天；
+
+查询当前月份的最后一天：
+
+select last_day(sysdate) from dual;
+
+查询某天所在月份的最后一天：
+
+select last_day(to_date('1992-10-09','yyyy-mm-dd')) from dual;
+
+如：
+
+查询每一个月最后一天过生日的同学：
+
+select * from stu where last_day(birthday) = birthday;
+
+oracle的LAST_DAY（）函数
+LAST_DAY函数返回指定日期对应月份的最后一天。
+
+获取当前日期的最后一天
+
+SQL> SELECT last_day(SYSDATE) FROM dual;
+
+运行结果：
+
+LAST_DAY(SYSDATE)
+-----------------
+2016/12/31 15:39:
+
+获取当前日期和当前日期所在月的最后一天
+
+SQL> SELECT SYSDATE,
+          LAST_DAY(SYSDATE) "Last",
+         LAST_DAY(SYSDATE) - SYSDATE "Days Left"
+      FROM DUAL;
+
+运行结果：
+
+SYSDATE        Last            Days Left
+-----------   -----------     ----------
+2016/12/18    2016/12/31       13
+
+获取当前日期所在月的第一天和最后一天：
+
+SQL> SELECT TRUNC(SYSDATE, 'MONTH') FIRSTDAY,
+           LAST_DAY(TRUNC(SYSDATE, 'MONTH')) LASTDAY
+        FROM DUAL;
+
+运行结果：
+
+FIRSTDAY       LASTDAY
+-----------    -----------
+2016/12/1      2016/12/31
+
+其实这些日期函数我们通常都是用来嵌套使用的，例如下面这个实例：
+
+求当前日期的上个月月初和上个月月末日期
+
+SELECT 
+    TRUNC(add_months(SYSDATE,-1),'mm') AS first_day
+   ,last_day(add_months(SYSDATE,-1)) AS last_day
+FROM dual;
+
+运行结果：
+
+FIRST_DAY     LAST_DAY
+-----------   -----------
+2016/11/1     2016/11/30
+
+oracle substr,to_date,to_char,first_day,last_day用法
+substr()截取字符串:如:2008-05-01 我要得到2008则可这样子写:
+substr('2008-05-01',1,4);
+截取后的字符串可以用||拼成一个新的字符串:如:得到2008-1-1,可写为:substr('2008-5-1',1,4)||'01-01';
+to_date()可以将截取后的字符串转换为相应的时间类型:('mystring','formatstring')正好是将string类型的字符串转换为时间对象,可以这样写:to_date(substr('2008-5-1',1,4)||'01-01'),yyyy-mm-dd);
+to_char()函数恰好相反,是将对象类型转换为相应的字符类型:如:to_char(to_date(substr('2008-5-1',1,4)||'01-01'),yyyy-mm-dd));查询出来的将是一个字符类型.
+first_day()得到一个月中的第一天:如first_day(to_date('2008-5-22','yyyy-mm-dd'))
+结果:2008-5-1
+last_day()得到一个月最后的一天:如:last_day(to_date('2008-5-22','yyyy-mm-dd'))
+结果:2008-5-31
+oracle函数大全 之 next_day last_day
+格式：NEXT_DAY(DATE,WEEKDAY) 即 NEXT_DAY(日期,星期几)
+
+NEXT_DAT函数返回输入日期开始，未来最近的指定星期对应的日期，直接写 ‘星期一’
+
+例如：select next_day(sysdate,'星期一') from dual;
+
+返回 当前时间之后的第一个星期一的时间(比如今天’7月18号0:01:01’，星期三，则返回’7月23号0:01:01’，自己数)
+
+格式：last_day(date) 即last_day(某个日期)
+
+select last_day(sysdate) from dual;
+
+返回特定日期所在月份的最后一天
+
+例如：找出每个月倒数第三天入职的员工
+
+SELECT * FROM EMP WHERE last_day(hiredate)-2=hiredate;
+
+解释：last_day(hiredate)得到的是每个员工入职当有的最后一天，-2表示倒数第三天，如果与员工入职时间相等，说明这个员工是当月倒数第三天入职的

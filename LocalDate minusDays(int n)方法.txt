@@ -1,0 +1,26 @@
+LocalDate minusDays(int n)：生成当前日期之前 n 天的日期
+// 获取当前日期
+LocalDate date = LocalDate.now();
+// 获取今天是几号
+int today = date.getDayOfMonth();
+
+// 减法操作 获取本月第一天的日期: 当前日期 - 已过去的天数（today - 1）
+date = date.minusDays(today - 1);
+
+// 加法操作 获取20天后的日期
+date = date.plusDays(20);
+
+// 是否是闰年
+date.isLeapYear();
+
+// 当前年的天数和当前月的天数
+date.lengthOfYear();
+date.lengthOfMonth();
+
+// 获取当天开始的时间 精确到分钟
+date.atStartOfDay();
+
+// 当前日期是否在指定日期之后
+date.isAfter(LocalDate.now());
+// 当前日期是否在指定日期之前
+date.isBefore(LocalDate.now());

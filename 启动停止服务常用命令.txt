@@ -1,0 +1,147 @@
+#启动完整集群的步骤
+#第一步：启动zookeeper
+./zk/ssh_all.sh /usr/local/zookeeper/bin/zkServer.sh start
+#第二步：在nn1上启动所有
+start-all.sh
+#第三步：在nn1上启动yarn日志代理服务
+yarn-daemon.sh start proxyserver
+#第四步：在nn1上启动MR的jobhistory服务
+mr-jobhistory-daemon.sh start historyserver 
+#第五步：在nn2上启动resourcemanager，用于启动yarn的HA
+yarn-daemon.sh start resourcemanager
+
+
+#启动matesotre服务
+nohup hive --service metastore > /dev/null 2>&1 &
+nohup hive --service hiveserver2 > /dev/null 2>&1 &
+#启动hive 客户端
+hive
+
+
+#启动zookeeper客户端
+/usr/local/zookeeper/bin/zkCli.sh -server nn1.hadoop:2181,nn2.hadoop:2181,s1.hadoop:2181
+
+
+yarn-daemon.sh start proxyserver
+mr-jobhistory-daemon.sh start historyserver 
+
+
+#habse 第一步：先启动集群zookeeper
+./ssh_all_zookeeper.sh /usr/local/zookeeper/bin/zkServer.sh start
+#第二步：启动集群hdfs
+start-dfs.sh
+#第三步：启动集群hbase
+start-hbase.sh
+hbase shell 页面
+#关闭集群hbase
+stop-hbase.sh
+#开启、关闭hbase单独
+hbase-daemon.sh start/stop regionserver
+hbase-daemon.sh start/stop master
+
+
+#启动Nginx
+/usr/local/nginx/sbin/nginx
+#转hadoop用户
+nohup ./query_nginx.sh >> /dev/null 2>&1 &
+#查看Nginx进程
+ps -aux | grep nginx
+#查看主进程号
+cat /var/run/nginx.pid 
+
+#启动flume
+flume-ng  agent -n a1  -c ../conf  -f ../conf/netcat.conf   -Dflume.root.logger=DEBUG,console
+
+
+#启动oozie
+oozie-start.sh
+#停止oozie
+oozie-stop.sh
+#使用命令验证服务是否启动成功
+oozie admin -status
+#查看所有普通任务
+oozie jobs
+#查看定时任务
+oozie jobs -jobtype coordinator
+#杀死某个任务 oozie 可以通过 jobid 来杀死某个定时任务
+oozie job -kill [id]
+oozie job -kill 0000001-190810214100080-oozie-root-W 
+
+#启动tomcat
+/usr/local/apache-tomcat-image-8.0.20/bin/startup.sh
+/usr/local/apache-tomcat-service-8.0.20/bin/startup.sh
+/usr/local/apache-tomcat-shop-8.0.20/bin/startup.sh
+
+
+#启动 redis-server
+cd /usr/local/redis
+redis-server /usr/local/redis/redis.conf 
+#使用客户连接redis-server
+redis-cli -h rs1.hadoop -p 6379
+#启动集群客户连接
+redis-cli -c -h nn1.hadoop -p 6379
+
+# 配置redis密码，这个是临时的，如果重启redis将失效
+# 设置密码：12345678
+config set requirepass 12345678
+# 重新登录客户端，通过auth 输入密码后，可以get
+① redis-cli -h rs1.hadoop -p 6379 -a 12345678
+② redis-cli -h rs1.hadoop -p 6379
+             auth 12345678
+# 如果想对redis集群操作有更多了解，可以研究它的命令参数
+./redis-trib.rb 
+
+# 通过客户端关闭redis-server
+redis-cli -h rs1.hadoop -p 6379 shutdown 
+# 接着上面例子，因为设置了密码所以得输入密码才能操作
+redis-cli -h rs1.hadoop -p 6379 -a 12345678 shutdown
+# 优雅的关闭方式：
+H=`hostname`
+redis-cli -h $H -p 6379 shutdown
+
+
+#启动spark
+#step1：启动zookeeper
+#step2：启动spark
+/usr/local/spark/sbin/start-all.sh
+#step3：在nn2.hadoop节点启动spark ha
+/usr/local/spark/sbin/start-master.sh 
+
+启动spark-shell
+spark-shell --master spark://nn1.hadoop:7077,nn2.hadoop:7077 --executor-memory 2G --total-executor-cores 3
+spark-shell --master spark://nn1.hadoop:7077 --executor-memory 2G --total-executor-cores 3
+
+
+# 启动kafka
+./ssh_all_zookeeper.sh "nohup /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties > /tmp/kafka_logs 2>&1 &"
+
+# 创建topic
+/usr/local/kafka/bin/kafka-topics.sh --create --replication-factor 2 --partitions 2 --topic hainiu_test --zookeeper nn1.hadoop:2181,nn2.hadoop:2181,s1.hadoop:2181
+这里指定了2个副本，2个分区，topic名为hainiu_test，并且指定zookeeper地址
+
+#停止kafka服务
+./ssh_all_zookeeper.sh /usr/local/kafka/bin/kafka-server-stop.sh
+
+#启动kafkamanager服务
+nohup /usr/local/kafka-manager/bin/kafka-manager -Dconfig.file=/usr/local/kafka-manager/conf/application.conf -Dhttp.port=9999 > /usr/local/kafka-manager/logs/kafka-manager.log 2>&1 &
+
+#启动kafka-producer
+/usr/local/kafka/bin/kafka-console-producer.sh --broker-list s1.hadoop:9092,s3.hadoop:9092,s4.hadoop:9092,s5.hadoop:9092,s6.hadoop:9092,s7.hadoop:9092,s8.hadoop:9092 --topic jira
+
+#启动mysql 
+systemctl start mysqld.service
+#关闭并重启mysql
+systemctl stop mysqld.service
+systemctl start mysqld.service
+
+#启动es-head  访问9100端口
+cd /usr/local/elasticsearch-head
+nohup npm run start > /dev/null 2>&1 &  
+
+# 重启es
+ps uax|grep elasticsearch|grep -v grep|awk '{print "kill "$2}'|sh
+/usr/local/elasticsearch/bin/elasticsearch -d
+
+# 启动es-sql 访问8090端口
+cd /usr/local/elasticsearch-site-server/site-server
+node node-server.js &        

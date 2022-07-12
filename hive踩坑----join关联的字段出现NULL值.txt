@@ -1,0 +1,37 @@
+针对这种情况，我找到了两种解决方案：
+
+方案一：不让NULL出现。
+
+           1、新建表的时候，将NULL处用其他内容替换，这样底层存储的就是替换后的内容。
+
+   CREATE TABLE aa (id int,name STRING)
+   WITH SERDEPROPERTIES (
+        'field.delim'='/t',
+        'escape.delim'='//',
+        'serialization.null.format'='' --将NULL用''替换
+   ) STORED AS TEXTFILE;
+ 
+ 
+   CREATE TABLE aa (id int,name STRING)
+   ROW FORMAT DELIMITED 
+        NULL DEFINED AS '' --将NULL用''替换
+   STORED AS TEXTFILE;
+
+
+
+ 2、已存在的表，通过参数修改
+alter table aa SETSERDEPROPERTIES('serialization.null.format' ='');
+
+
+
+方案二：在关联查询的时候进行处理，在一个条件成立的情况下，另一个条件存在NULL的情况。
+SELECT
+	A.ID1
+	,A.ID
+	,B.ID
+	,B.ID1
+FROM  A 
+LEFT JOIN B
+--ON A.ID1 = B.ID1 AND NVL(A.ID,'NULL') = NVL(B.ID,'NULL');
+ON A.ID1 = B.ID1 AND COALESCE(A.ID,'NULL') = COALESCE(B.ID,'NULL');
+

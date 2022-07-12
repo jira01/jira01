@@ -1,0 +1,8 @@
+ 正文
+db2的sql样例：
+
+select * from sname.usertable fetch first 10 rows only 
+1
+db2使用fetch first 10 rows only返回前10行数据；
+mysql使用limit 10返回前10行数据；
+oracle使用rownum<=10返回前10行数据。

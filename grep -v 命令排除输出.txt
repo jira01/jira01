@@ -1,0 +1,35 @@
+Linux grep -v 命令排除输出
+
+有时候，我们在线上查日志定位问题的时候，经常会使用cat xxxx.log |grep yyyy命令，如果grep的时候，想排除某些字段，那么可以如下操作：
+
+cat test.log | grep "login"|grep -v "deviceType"
+
+上面的命令的意思是：找出test.log中包含login信息的,且没有deviceType这个字段的。
+
+这个其实非常有用的，因为有些业务日志信息，就是以有没有传递某个字段，来做一些业务逻辑区分的。这个时候，就可以使用上面的命令来识别是哪些业务场景进来的。
+
+具体例子
+{
+	"eventName": "login",
+	"msg": "",
+	"costTime": 144,
+	"userId": 111111,
+	"request": {
+	    code:"200"
+		deviceType ":2222"
+	}
+}
+
+上面是request字段里带有deviceType字段的,下面这个则没有。
+
+{
+	"eventName": "login",
+	"msg": "",
+	"costTime": 22,
+	"userId": 2222,
+	"request": {
+		code:"200"
+	}
+}
+
+直接使用上面的命令即可找出所有不带deviceType的日志信息出来。

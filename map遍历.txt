@@ -1,0 +1,172 @@
+java map遍历、排序，根据value获取key
+Map 四种遍历：
+
+1 Map<String,String> map = new HashMap<String, String>();  
+2 map.put("one","java");  
+3 map.put("two","cn");  
+4 map.put("three","love");  
+ 
+
+第一种：取值遍历
+
+1 for(String key:map.keySet()){  
+2     System.out.println("key="+key+"and value=" +map.get(key));  
+3 }  
+ 
+
+第二种：Iterator遍历
+ Set<Entry<Strint, String>> set = map.entrySet()
+ Iterator<Entry<Strint, String>> is = set.iterator()
+ while(is.hasNext){
+	Set<Entry<Strint, String>> entry = is.hasNext
+ }
+
+ Iterator<Map.Entry<String,String>> it = map.entrySet().iterator();  
+    while(it.hasNext()){  
+      Map.Entry<String,String> entry=it.next();  
+      System.out.println("key=" +entry.getKey() +" and value="+entry.getValue());  
+  }  
+ 
+
+第三种：遍历所有的Value值
+
+ for(String v:map.values()){  
+       System.out.println("value= "+ v);  
+ } 
+ 
+ map.values().forEach(System.out::println)
+ 
+该方式取得不了key值，直接遍历map中存放的value值。
+
+ 
+
+第四种：使用entrySet遍历
+
+ for(Map.Entry<String,String > entry:map.entrySet()){  
+       System.out.println("key=" +entry.getKey() +" and value="+entry.getValue());  
+ } 
+ 
+ set<Entry<Strint, String>>set = map.entrySet()
+ set.Iterator().forEachRemaining(e->Systim.out.println(e.getKey()+","+e.getValue))
+ 
+
+map排序：
+
+按 key 排序：
+
+复制代码
+ 1 public class MapSortDemo {
+ 2 
+ 3     public static void main(String[] args) {
+ 4 
+ 5         Map<String, String> map = new TreeMap<String, String>();
+ 6 
+ 7         map.put("KFC", "kfc");
+ 8         map.put("WNBA", "wnba");
+ 9         map.put("NBA", "nba");
+10         map.put("CBA", "cba");
+11 
+12         Map<String, String> resultMap = sortMapByKey(map);    //按Key进行排序
+13 
+14         for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+15             System.out.println(entry.getKey() + " " + entry.getValue());
+16         }
+17     }
+18     
+19     /**
+20      * 使用 Map按key进行排序
+21      * @param map
+22      * @return
+23      */
+24     public static Map<String, String> sortMapByKey(Map<String, String> map) {
+25         if (map == null || map.isEmpty()) {
+26             return null;
+27         }
+28 
+29         Map<String, String> sortMap = new TreeMap<String, String>(
+30                 new MapKeyComparator());
+31 
+32         sortMap.putAll(map);
+33 
+34         return sortMap;
+35     }
+36 }
+37 
+38 
+39 比较器类
+40 
+41 class MapKeyComparator implements Comparator<String>{
+42 
+43     @Override
+44     public int compare(String str1, String str2) {
+45         
+46         return str1.compareTo(str2);
+47     }
+48 }
+复制代码
+ 
+
+按 value 排序：
+
+复制代码
+ 1        //如果在Treemap里面想按照value进行排序，我们必须借助工具类Collections.sort(List,Comparator);
+ 2         TreeMap<String,Object> map2 = new TreeMap<String,Object>();
+ 3         map2.put("a","a");
+ 4         map2.put("b","cccccc");
+ 5         map2.put("c","bbbbb");
+ 6         map2.put("d","eeee");
+ 7         map2.put("e","dd");
+ 8         ArrayList<Map.Entry<String,Object>> list = new ArrayList<Map.Entry<String,Object>>(map2.entrySet());
+ 9         Collections.sort(list,new Comparator<Map.Entry<String,Object>>() {
+10 
+11             @Override
+12             public int compare(Entry<String, Object> o1, Entry<String, Object> o2) {
+13                 //变成按照value排列
+14 //                return o2.getValue().toString().compareTo(o1.getValue().toString());
+15                 //按照value的长度排序
+16                 Integer o11 = o1.getValue().toString().length();
+17                 Integer o22 = o2.getValue().toString().length();
+18                 return o22.compareTo(o11);
+19             }
+20             
+21         });
+22         
+23         for(Map.Entry<String,Object> l :list){
+24             System.out.println(l.getKey()+":"+l.getValue());
+25         }
+复制代码
+ 
+
+在 map 中根据 value 获取 key：
+
+复制代码
+ 1     //根据map的value获取map的key  
+ 2     private static String getKey(Map<String,String> map,String value){  
+ 3         String key="";  
+ 4         for (Map.Entry<String, String> entry : map.entrySet()) {  
+ 5             if(value.equals(entry.getValue())){  
+ 6                 key=entry.getKey();  
+ 7             }  
+ 8         }  
+ 9         return key;  
+10     }  
+复制代码
+ 
+
+若要取 map 中 value 的最大值 或 与之对应的 key（整型或浮点型）：可利用list
+
+复制代码
+ 1         //利用list取最大值
+ 2         List<Double> listmap = new ArrayList<Double>();
+ 3         for(String key:mapp.keySet()){
+ 4             listmap.add(mapp.get(key));
+ 5         }
+ 6         //取到最大值的value
+ 7         double valueMax = Collections.max(listmap);
+ 8         //根据map的value获取map的key  
+ 9         String emotionMax = "";  
+10         for (Map.Entry<String, Double> entry : mapp.entrySet()) {  
+11             if(valueMax == entry.getValue()){  
+12                 emotionMax = entry.getKey();  //取到最大值的 value 对应的 key
+13             }
+14         }

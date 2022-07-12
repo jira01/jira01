@@ -1,0 +1,3 @@
+select id,name from administrator.dbtable14 fetch first  1000 rows only
+
+使用 fetch first  1000 rows only 限制返回的行数，mysql使用limit,   oracle使用rownum

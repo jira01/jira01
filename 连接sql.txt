@@ -1,0 +1,3 @@
+sqlC.jdbc("jdbc:mysql://nn1.hadoop:3306/jiracralwer?user=jira&password=12345678","jira_web_seed")
+
+sqlc.jdbc("jdbc:mysql://nn2.hadoop:3306/jiracralwer?user=jira&password=12345678","jira_web_seed")

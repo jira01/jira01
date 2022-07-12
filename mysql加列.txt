@@ -1,0 +1,47 @@
+MySQL 中添加列、修改列以及删除列
+复制代码
+
+ 1 ALTER TABLE：添加，修改，删除表的列，约束等表的定义。     
+ 2 查看列：desc 表名;  
+ 3 修改表名：alter table t_book rename to bbb;  
+ 4 添加列：alter table 表名 add column 列名 varchar(30);  
+ 5 删除列：alter table 表名 drop column 列名;  
+ 6 修改列名MySQL： alter table bbb change nnnnn hh int;  
+ 7 修改列名SQLServer：exec sp_rename't_student.name','nn','column';  
+ 8 修改列名Oracle：lter table bbb rename column nnnnn to hh int;  
+ 9 修改列属性：alter table t_book modify name varchar(22);  
+10 sp_rename：SQLServer 内置的存储过程，用与修改表的定义。 
+ 
+   添加字段  
+ 1 alter table user add COLUMN new1 VARCHAR(20) DEFAULT NULL; //增加一个字段，默认为空  
+ 2 alter table user add COLUMN new2 VARCHAR(20) NOT NULL;  //增加一个字段，默认不能为空
+
+
+MySQL 查看约束，添加约束，删除约束 添加列，修改列，删除列  
+ 1 查看表的字段信息：desc 表名;  
+ 2 查看表的所有信息：show create table 表名;  
+ 3 添加主键约束：alter table 表名 add constraint 主键 （形如：PK_表名） primary key 表名(主键字段);  
+ 4 添加外键约束：alter table 从表 add constraint 外键（形如：FK_从表_主表） foreign key 从表(外键字段) references 主表(主键字段);  
+ 5 删除主键约束：alter table 表名 drop primary key;  
+ 6 删除外键约束：alter table 表名 drop foreign key 外键（区分大小写）;  
+ 7 修改表名：alter table t_book rename to bbb;  
+ 8 添加列：alter table 表名 add column 列名 varchar(30);  
+ 9 删除列：alter table 表名 drop column 列名;  
+10 修改列名MySQL： alter table bbb change nnnnn hh int;  
+11 修改列名SQLServer：exec sp_rename't_student.name','nn','column';  
+12 修改列名Oracle：alter table bbb rename column nnnnn to hh int;  
+13 修改列属性：alter table t_book modify name varchar(22);  
+14 sp_rename：SQLServer 内置的存储过程，用与修改表的定义。  
+
+我是一个it新手，学了很多东西，都用不上，不知道学的是为了什么，比如读大学几年，能用到的东西很少，只是有个 文凭好找工作罢了，；
+复制代码
+复制代码
+ Mysql在表的某一位置增加一列的命令
+  如果想在一个已经建好的表中添加一列，可以用诸如：
+  alter table t1 add column addr varchar(20) not null;
+ 
+  这条语句会向已有的表t1中加入一列addr，这一列在表的最后一列位置。如果我们希望添加在指定的一列，可以用：
+  alter table t1 add column addr varchar(20) not null after user1;
+ 
+  注意，上面这个命令的意思是说添加addr列到user1这一列后面。如果想添加到第一列的话，可以用：
+  alter table t1 add column addr varchar(20) not null first;

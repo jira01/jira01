@@ -1,0 +1,30 @@
+HIVE如何返回周or周几
+
+1.返回一年中的第几周
+即可以是时分秒也可以直接是日期
+
+ select weekofyear('2011-12-08 10:03:01') as week 
+select weekofyear('2011-12-08') as week
+week
+49
+2.返回一周中的周几
+有两种方法，一种是用取余函数，另一种是用时间差函数
+
+
+语法: pmod(int a, int b),pmod(double a, double b)
+返回值: int double
+说明: 返回正的a除以b的余数
+
+SELECT if(pmod(datediff('2020-04-20', '1920-01-01') - 3, 7)='0', 7, pmod(datediff('2020-04-20', '1920-01-01') - 3, 7)) 
+
+ select pmod(datediff('2019-04-01','1920-01-01')-3,7) as week 
+这里一周是从0~6，那么如果想装换为1~7则可以用第二种方法
+
+说明：返回值为“0-6”(“0-6”分别表示“星期日-星期六”）;
+
+2.2 datediff 是两个日期相减的函数
+语法：datediff(string enddate, string startdate)
+
+说明: 返回两个时间参数的相差天数。
+
+ select IF(pmod(datediff('2019-04-01','1920-01-01')-3,7)='0',7,pmod(datediff('2019-04-01','1920-01-01')-3,7)) as week 

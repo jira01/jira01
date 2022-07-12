@@ -1,0 +1,16 @@
+java保留两位小数4种方法
+打赏
+方法一：String的format方法（推荐）
+
+double f = 111231.5585;
+
+System.out.println(String.format("%.2f", f));
+
+ 
+
+方法二：DecimalFormat的format方法
+
+double f = 111231.5585;
+
+DecimalFormat df = new DecimalFormat("#.00");
+System.out.println(df.format(f));

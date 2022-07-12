@@ -1,0 +1,37 @@
+Hive详细表结构操作（增加列，删除列，修改列，移动列）
+
+1、向Hive表中添加某个字段
+格式：alter table 表名 add columns (字段名 字段类型 comment '字段描述')；
+例1：alter table table_name add columns (now_time string comment '当前时间');
+例2：alter table table_name add columns (now_time varchar(300) comment '当前时间');
+
+2、在Hive表中指定位置添加字段
+分两步，先添加字段到最后（add columns），然后再移动到指定位置（change）
+
+alter table table_name add columns (c_time string comment '当前时间'); -- 正确，添加在最后
+alter table table_name change c_time c_time string after address ;  -- 正确，移动到指定位置,address字段的后面
+3、Hive中修改表中列的名称
+ALTER TABLE table_name CHANGE 旧列名 新列名 字段类型;
+例1：alter table DWD_ORC_ENTRY_XF change id taskid varchar(300);
+注意：这里字段和字段类型可以一起修改。
+
+4、修改Hive表的名字
+alter table name rename to new_Name;
+
+5、删除Hive表中某个字段
+CREATE TABLE test (
+a STRING,
+b BIGINT,
+c STRING,
+d STRING,
+e BIGINT,
+f BIGINT
+);
+如果需要删除 column f 列，可以使用以下语句：
+ALTER TABLE test REPLACE COLUMNS (
+a STRING,
+b BIGINT,
+c STRING,
+d STRING,
+e BIGINT
+);

@@ -1,0 +1,25 @@
+
+python日志目录：         /home/hadoop/python/hainiu_crawler/log 
+python下载文件目录：     /home/hadoop/python/hainiu_crawler/data/tmp          （下载页面，临时生成文件目录）
+						 /done              								  （当有新文件，会把旧文件mv 到 done目录下）
+						 /merge_tmp    										  （将小文件merge成大文件时的临时目录）
+						 /up                  								  （当merge完成，会把临时目录文件mv到up目录）
+
+shell脚本目录：          /home/hadoop/python/hainiu_crawler/shell
+python脚本根目录：       /home/hadoop/hainiu_crawler
+
+日志切割工作根目录：     /home/hadoop/python/hainiu_crawler
+日志切割工作目录：       /home/hadoop/python/hainiu_crawler/work			  （flume监控的目录）
+日志切割备份目录：       /home/hadoop/python/hainiu_crawler/bak 			  （备份目录）
+日志切割日志生成目录：   /home/hadoop/python/hainiu_crawler/log 			  （shell脚本的log日志）
+hdfs上传目录的根目录：   /user/hadoop/hainiu/web_page			
+---------------------------------------------------------------------------------------------------
+mkdir -p /home/hadoop/python/hainiu_crawler/log 
+mkdir -p /home/hadoop/python/hainiu_crawler/data/tmp 
+mkdir -p /home/hadoop/python/hainiu_crawler/shell
+mkdir -p /home/hadoop/hainiu_crawler
+mkdir -p /home/hadoop/python/hainiu_crawler
+mkdir -p /home/hadoop/python/hainiu_crawler/work
+mkdir -p /home/hadoop/python/hainiu_crawler/bak
+mkdir -p /home/hadoop/python/hainiu_crawler/log
+hadoop fs -mkdir -p /user/hadoop/hainiu/web_page
