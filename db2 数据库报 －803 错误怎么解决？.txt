@@ -1,0 +1,6 @@
+db2 数据库报 －803 错误怎么解决？
+数据插入记录的时候报的错。另外DB2的客户端有哪些？我现在没有财富值了^_^
+
+解决方法如下：
+alter table student alter ID restart with xxxx 。
+xxxx可以自定义，为当前表中id的最大值加1即可。
