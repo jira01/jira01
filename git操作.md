@@ -108,7 +108,7 @@ git clone https://gitee.com/wupeiqi/xianglong.git
 cd 目录 
 git init 
 git remote add origin https://gitee.com/wupeiqi/xianglong.git
-git pull origin maste 
+git pull origin master
 ```
 
 
