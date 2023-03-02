@@ -7,12 +7,12 @@
 	local status = $?
 	while ((status!=0&&retry_times>0));
 	do
-	LOG "任务[$do_work]执行失败,等待$wait_time..."
-	sleep $wait_time
-	$do_work
-	status=$?
-	((retry_times--))
-	LOG "剩余重试次数$retry_times"
+		LOG "任务[$do_work]执行失败,等待$wait_time..."
+		sleep $wait_time
+		$do_work
+		status=$?
+		((retry_times--))
+		LOG "剩余重试次数$retry_times"
 	done
 	return $status
 

@@ -1,0 +1,26 @@
+阿里云云盘挂载步骤
+挂载到/data 目录
+a.创建data目录	
+命令：mkdir /data
+b.查看实例上的数据盘/dev/vdb是否存在	
+命令：fdisk -l
+c.分区数据盘	
+命令：fdisk -u /dev/vdb
+再依次输入“n”“p”“1”“回车”“回车”“wq”即可
+d.查看新分区	
+命令：fdisk -lu /dev/vdb
+e.创建VFAT文件系统		
+命令：mkfs.ext4 /dev/vdb1
+f.备份etc/fstab		
+命令：cp /etc/fstab /etc/fstab.bak
+g.向/etc/fstab里写入新分区信息		
+命令：echo `blkid /dev/vdb1 | awk '{print $2}' | sed 's/\"//g'` /data ext4 defaults 0 0 >> /etc/fstab
+h.查看/etc/fstab中的新分区信息
+命令：cat /etc/fstab
+i.挂载文件系统
+命令：mount /dev/vdb1 /data
+j.查看新建文件系统的信息
+命令：df -h
+
+https://www.jianshu.com/p/b22516121c17
+https://help.aliyun.com/document_detail/25426.html?spm=a2c4g.11186623.2.24.55c93b94SNaLhH#concept-jl1-qzd-wdb
